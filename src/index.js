@@ -1,18 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Task from './components/task';
+import Task from './task';
 
 class LiItem extends React.Component {
-  state = {
-    tasks: [],
-    inputTask: {
-      id: '',
-      text: '',
-      done: '',
-    },
-  };
+  constructor(props) {
+    super(props);
+    this.handlerOnSubmit = this.handlerOnSubmit.bind(this);
+    this.handlerOnChange = this.handlerOnChange.bind(this);
+    this.state = {
+      tasks: [],
+      inputTask: {
+        id: '',
+        text: '',
+        done: '',
+      },
+    };
+  }
 
-  handlerOnChange = (e) => {
+  handlerOnChange(e) {
     this.setState({
       inputTask: {
         id: Math.random().toString(),
@@ -20,9 +25,9 @@ class LiItem extends React.Component {
         done: false,
       },
     });
-  };
+  }
 
-  handlerOnSubmit = (e) => {
+  handlerOnSubmit(e) {
     e.preventDefault();
     if (this.state.inputTask.text.length > 0) {
       this.setState({
@@ -44,7 +49,7 @@ class LiItem extends React.Component {
         },
       });
     }
-  };
+  }
 
   render() {
     return (

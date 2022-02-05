@@ -1,8 +1,11 @@
 import React from 'react';
 import HoverButtons from './hoverButtons';
 
-export default class Task extends React.Component {
-  state = { relatedLiL: '' };
+class Task extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { relatedLiL: '' };
+  }
 
   handlerMouseEnter(e) {
     this.setState(() => ({
@@ -33,3 +36,5 @@ export default class Task extends React.Component {
     );
   }
 }
+
+export default Task;

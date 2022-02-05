@@ -1,17 +1,24 @@
 import React from 'react';
 
-export default class HoverButtons extends React.Component {
-  handlerOnAccept = (e) => {
+class HoverButtons extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handlerOnAccept = this.handlerOnAccept.bind(this);
+    this.handlerOnDelete = this.handlerOnDelete.bind(this);
+  }
+
+  handlerOnAccept(e) {
     e.target.closest('LI').classList.toggle('completed-text');
     const buttons = e.target.closest('LI').getElementsByTagName('button');
     for (let button of buttons) {
       button.classList.toggle('completed');
     }
-  };
+  }
 
-  handlerOnDelete = (e) => {
+  handlerOnDelete(e) {
     e.target.closest('LI').remove();
-  };
+    // Надо добавить какую-нибудь функцию, чтобы текст переносился внутри элемента ли (чтобы ли резинился, причём не затрагивая кнопки).
+  }
 
   render() {
     return (
@@ -64,3 +71,5 @@ export default class HoverButtons extends React.Component {
     );
   }
 }
+
+export default HoverButtons;
