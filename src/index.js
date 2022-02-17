@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Task from './components/task';
+import TaskInput from './components/taskInput';
 
-class LiItem extends React.Component {
+class App extends React.Component {
   state = {
     tasks: [],
     inputTask: {
@@ -12,31 +13,26 @@ class LiItem extends React.Component {
     },
   };
 
-  handlerOnChange = (e) => {
+  handleOnChange = (e) => {
     this.setState({
       inputTask: {
-        id: Math.random().toString(),
         text: e.target.value,
-        done: false,
       },
     });
   };
 
-  handlerOnSubmit = (e) => {
+  handleOnSubmit = (e) => {
     e.preventDefault();
     if (this.state.inputTask.text.length > 0) {
       this.setState({
         tasks: [
           ...this.state.tasks,
           {
-            id: this.state.inputTask.id,
+            id: Date.now(),
             text: this.state.inputTask.text,
-            done: this.state.inputTask.done,
+            done: false,
           },
         ],
-      });
-
-      this.setState({
         inputTask: {
           id: '',
           text: '',
@@ -46,27 +42,54 @@ class LiItem extends React.Component {
     }
   };
 
+  handleOnClickAccept = (e) => {
+    const allTasks = this.state.tasks;
+    const currentTaskId = e.target.closest('LI').getAttribute('id');
+
+    const currentTaskIndex = allTasks.findIndex(
+      (task) => task.id == currentTaskId
+    );
+
+    allTasks[currentTaskIndex].done = !allTasks[currentTaskIndex].done;
+
+    this.setState({
+      tasks: allTasks,
+    });
+  };
+
+  handleOnClickDelete = (e) => {
+    const allTasks = this.state.tasks;
+    const currentTaskId = e.target.closest('LI').getAttribute('id');
+
+    allTasks.splice(
+      allTasks.findIndex((task) => task.id == currentTaskId),
+      1
+    );
+
+    this.setState({
+      tasks: allTasks,
+    });
+  };
+
   render() {
+    console.log(this.state.tasks);
     return (
       <div className="wrapper">
         <div className="container">
-          <form className="tasks-сreator__form" onSubmit={this.handlerOnSubmit}>
-            <input
-              className="tasks-сreator__input"
-              type="text"
-              placeholder="Напишите задачу"
-              tabIndex="1"
-              value={this.state.inputTask.text}
-              onChange={this.handlerOnChange}
-            />
-            <button className="tasks-сreator__button" type="submit">
-              Добавить
-            </button>
-          </form>
+          <TaskInput
+            onTextChange={this.handleOnChange}
+            onTaskAdd={this.handleOnSubmit}
+            text={this.state.inputTask.text}
+          />
           <div className="tasks-container">
             <ul className="tasks-container__list">
               {this.state.tasks.map((task) => (
-                <Task task={task} key={task.id} />
+                <Task
+                  task={task}
+                  key={task.id}
+                  handleOnClickAccept={this.handleOnClickAccept}
+                  handleOnClickDelete={this.handleOnClickDelete}
+                />
               ))}
             </ul>
           </div>
@@ -78,7 +101,7 @@ class LiItem extends React.Component {
 
 ReactDOM.render(
   <React.StrictMode>
-    <LiItem />
+    <App />
   </React.StrictMode>,
   document.querySelector('#root')
 );

@@ -1,35 +1,28 @@
 import React from 'react';
 import HoverButtons from './hoverButtons';
 
-export default class Task extends React.Component {
-  state = { relatedLiL: '' };
+export default function Task(props) {
+  const { handleOnClickAccept, handleOnClickDelete } = props;
 
-  handlerMouseEnter(e) {
-    this.setState(() => ({
-      relatedLi: e.target,
-    }));
-    e.target.querySelector('.tasks-container__item__span').style.visibility =
-      'visible';
-  }
-
-  handlerMouseLeave(e) {
-    this.state.relatedLi.querySelector(
-      '.tasks-container__item__span'
-    ).style.visibility = 'hidden';
-  }
-
-  render() {
-    return (
-      <li
-        id={this.props.task.id}
-        className="tasks-container__item"
-        done={this.props.task.done.toString()}
-        onMouseEnter={this.handlerMouseEnter.bind(this)}
-        onMouseLeave={this.handlerMouseLeave.bind(this)}
-      >
-        {this.props.task.text}
-        <HoverButtons task={this.props.task} />
-      </li>
-    );
-  }
+  return (
+    <li
+      id={props.task.id}
+      className={`tasks-container__item ${
+        props.task.done ? 'task--completed' : ''
+      }`}
+    >
+      <span className={`${props.task.done ? 'task-text--completed' : ''}`}>
+        {props.task.text}
+      </span>
+      {props.task.done && (
+        <span className="task-completed-label">Выполнено</span>
+      )}
+      <HoverButtons
+        task={props.task}
+        key={props.task.id}
+        handleOnClickAccept={handleOnClickAccept}
+        handleOnClickDelete={handleOnClickDelete}
+      />
+    </li>
+  );
 }

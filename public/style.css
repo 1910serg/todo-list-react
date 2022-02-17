@@ -177,25 +177,31 @@ body {
   background-color: #fff;
 }
 
-.completed {
-  order: 1;
+.tasks-container__item__accept--completed {
+  background-color: #dcf1f4;
+}
+
+.tasks-container__item__delete--completed {
+  background-color: #dcf1f4;
+}
+
+.task-completed-label {
+  flex-grow: 1;
+  color: #9b9b9b;
+  margin-left: 4px;
+}
+
+.task--completed {
   background: #dcf1f4;
 }
 
-.completed-text {
-  order: 2;
-  display: flex;
-  align-items: center;
-  text-decoration: line-through;
+.task-text--completed {
   background: #dcf1f4;
+  text-decoration: line-through;
 }
-.completed-text::after {
-  content: "Выполнено";
-  display: flex;
-  flex: 1 1 auto;
-  text-decoration: none;
-  margin-left: 10px;
-  color: #9b9b9b;
+
+.tasks-container__item:hover .tasks-container__item__span {
+  visibility: visible;
 }
 
 @media (max-width: 500px) {
