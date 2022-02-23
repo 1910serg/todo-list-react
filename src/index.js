@@ -42,9 +42,8 @@ class App extends React.Component {
     }
   };
 
-  handleOnClickAccept = (e) => {
+  handleOnClickAccept = (e, currentTaskId) => {
     const allTasks = this.state.tasks;
-    const currentTaskId = e.target.closest('LI').getAttribute('id');
 
     const currentTaskIndex = allTasks.findIndex(
       (task) => task.id == currentTaskId
@@ -57,9 +56,8 @@ class App extends React.Component {
     });
   };
 
-  handleOnClickDelete = (e) => {
+  handleOnClickDelete = (e, currentTaskId) => {
     const allTasks = this.state.tasks;
-    const currentTaskId = e.target.closest('LI').getAttribute('id');
 
     allTasks.splice(
       allTasks.findIndex((task) => task.id == currentTaskId),
@@ -72,7 +70,6 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.tasks);
     return (
       <div className="wrapper">
         <div className="container">
@@ -87,8 +84,13 @@ class App extends React.Component {
                 <Task
                   task={task}
                   key={task.id}
-                  handleOnClickAccept={this.handleOnClickAccept}
-                  handleOnClickDelete={this.handleOnClickDelete}
+                  id={task.id}
+                  handleOnClickAccept={(e) =>
+                    this.handleOnClickAccept(e, task.id)
+                  }
+                  handleOnClickDelete={(e) =>
+                    this.handleOnClickDelete(e, task.id)
+                  }
                 />
               ))}
             </ul>
