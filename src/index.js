@@ -9,37 +9,49 @@ class App extends React.Component {
     inputTask: {
       id: '',
       text: '',
+      date: '',
       done: '',
     },
   };
 
-  handleOnChange = (e) => {
+  handleOnTextChange = (e) => {
     this.setState({
       inputTask: {
+        ...this.state.inputTask,
         text: e.target.value,
+      },
+    });
+  };
+
+  handleOnDateChange = (e) => {
+    this.setState({
+      inputTask: {
+        ...this.state.inputTask,
+        date: e.target.value,
       },
     });
   };
 
   handleOnSubmit = (e) => {
     e.preventDefault();
-    if (this.state.inputTask.text.length > 0) {
-      this.setState({
-        tasks: [
-          ...this.state.tasks,
-          {
-            id: Date.now(),
-            text: this.state.inputTask.text,
-            done: false,
-          },
-        ],
-        inputTask: {
-          id: '',
-          text: '',
-          done: '',
+    if (this.state.inputTask.text.length < 1) return;
+    this.setState({
+      tasks: [
+        ...this.state.tasks,
+        {
+          id: Date.now(),
+          text: this.state.inputTask.text,
+          date: this.state.inputTask.date,
+          done: false,
         },
-      });
-    }
+      ],
+      inputTask: {
+        id: '',
+        text: '',
+        date: '',
+        done: '',
+      },
+    });
   };
 
   handleOnClickAccept = (currentTaskId) => {
@@ -70,13 +82,16 @@ class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.tasks);
     return (
       <div className="wrapper">
         <div className="container">
           <TaskInput
-            onTextChange={this.handleOnChange}
+            onTextChange={this.handleOnTextChange}
+            onDateChange={this.handleOnDateChange}
             onTaskAdd={this.handleOnSubmit}
             text={this.state.inputTask.text}
+            date={this.state.inputTask.date}
           />
           <div className="tasks-container">
             <ul className="tasks-container__list">
