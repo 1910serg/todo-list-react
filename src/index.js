@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Task from './components/task';
-import TaskInput from './components/taskInput';
+import TaskForm from './components/taskForm';
 
 class App extends React.Component {
   state = {
@@ -82,30 +82,27 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.tasks);
     return (
       <div className="wrapper">
         <div className="container">
-          <TaskInput
+          <TaskForm
             onTextChange={this.handleOnTextChange}
             onDateChange={this.handleOnDateChange}
             onTaskAdd={this.handleOnSubmit}
             text={this.state.inputTask.text}
             date={this.state.inputTask.date}
           />
-          <div className="tasks-container">
-            <ul className="tasks-container__list">
-              {this.state.tasks.map((task) => (
-                <Task
-                  task={task}
-                  key={task.id}
-                  id={task.id}
-                  handleOnClickAccept={() => this.handleOnClickAccept(task.id)}
-                  handleOnClickDelete={() => this.handleOnClickDelete(task.id)}
-                />
-              ))}
-            </ul>
-          </div>
+          <ul className="tasks-container__list">
+            {this.state.tasks.map((task) => (
+              <Task
+                task={task}
+                key={task.id}
+                id={task.id}
+                handleOnClickAccept={() => this.handleOnClickAccept(task.id)}
+                handleOnClickDelete={() => this.handleOnClickDelete(task.id)}
+              />
+            ))}
+          </ul>
         </div>
       </div>
     );

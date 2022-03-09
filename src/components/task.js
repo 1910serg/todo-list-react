@@ -1,17 +1,15 @@
 import React from 'react';
 import HoverButtons from './hoverButtons';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dateToEnd: '',
-    };
-  }
+export default class Task extends React.Component {
+  state = {
+    dateToEnd: '',
+  };
 
   componentDidMount() {
     if (this.props.task.date === '') return;
-    this.timerID = setInterval(() => this.tick(), 1000);
+    this.tick();
+    this.timerID = setInterval(() => this.tick(), 60000);
   }
 
   componentWillUnmount() {
@@ -19,12 +17,16 @@ export default class App extends React.Component {
   }
 
   tick() {
-    const dateTaskEnd = Date.parse(this.props.task.date);
-    const dateToEnd = dateTaskEnd - Date.now();
-    const dateToEndSeconds = Math.round(dateToEnd / 1000);
+    if (this.state.dateToEnd < 0) {
+      clearInterval(this.timerID);
+      return;
+    }
+    const dateTaskEnd = Date.parse(this.props.task.date + 'T23:59:59');
+    const dateToEndMilliseconds =
+      Math.round((dateTaskEnd - Date.now()) * 10) / 10;
+    const dateToEndMinuts = Math.round(dateToEndMilliseconds / 60000);
 
-    console.log(dateToEndSeconds);
-    this.setState({ dateToEnd: dateToEndSeconds });
+    this.setState({ dateToEnd: dateToEndMinuts });
   }
 
   render() {
@@ -34,9 +36,7 @@ export default class App extends React.Component {
       <li
         id={task.id}
         className={`tasks-container__item ${
-          this.state.dateToEnd <= 86400 &&
-          this.state.dateToEnd > 0 &&
-          !task.done
+          this.state.dateToEnd <= 1440 && this.state.dateToEnd > 0 && !task.done
             ? 'tasks--one_day_to_complete'
             : ''
         } ${
@@ -44,28 +44,40 @@ export default class App extends React.Component {
             ? 'tasks--the_task_is_overdue'
             : ''
         } ${task.done ? 'task--completed' : ''}`}
-        secondstoend={this.state.dateToEnd}
+        minutstoend={this.state.dateToEnd}
       >
-        {/* <div className="task_wrapper"> */}
-        {/* <div className="task-content"> */}
-        <span className={`${task.done ? 'task-text--completed' : ''}`}>
-          {task.text}
-        </span>
-        {/* </div> */}
-        {/* <div className="task-labels"> */}
-        {task.date && <span className="task-date-label">До {task.date}</span>}
-        {task.done && <span className="task-completed-label">Выполнено</span>}
-        {this.state.dateToEnd < 0 && !task.done && (
-          <span className="task-overdue-label">Дата исполнения прошла</span>
-        )}
-        {/* </div> */}
-        {/* </div> */}
-        <HoverButtons
-          task={task}
-          key={task.id}
-          handleOnClickAccept={handleOnClickAccept}
-          handleOnClickDelete={handleOnClickDelete}
-        />
+        <div className="task_wrapper">
+          <div className="task_wrapperText">
+            <span
+              className={`task-text ${task.done ? 'task-text--completed' : ''}`}
+            >
+              {task.text}
+            </span>
+
+            <div className="task-labels">
+              {task.date && (
+                <span className="task-date-label">До {task.date}</span>
+              )}
+              {task.done && (
+                <span className="task-completed-label">Выполнено</span>
+              )}
+              {this.state.dateToEnd < 0 && !task.done && (
+                <span className="task-overdue-label">
+                  Дата исполнения прошла
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="task-buttons">
+            <HoverButtons
+              task={task}
+              key={task.id}
+              handleOnClickAccept={handleOnClickAccept}
+              handleOnClickDelete={handleOnClickDelete}
+            />
+          </div>
+        </div>
       </li>
     );
   }

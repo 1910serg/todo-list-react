@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TaskInput(props) {
+export default function TaskForm(props) {
   const { onTextChange, onDateChange, onTaskAdd, text, date } = props;
 
   return (
