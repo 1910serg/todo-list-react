@@ -1,5 +1,7 @@
 import React from 'react';
 import HoverButtons from './hoverButtons';
+import { Route, Routes, Link } from 'react-router-dom';
+import TaskPage from './taskPage';
 
 export default class Task extends React.Component {
   state = {
@@ -31,10 +33,11 @@ export default class Task extends React.Component {
 
   render() {
     const { handleOnClickAccept, handleOnClickDelete, task } = this.props;
-
+    const { id } = task.id;
+    console.log(task);
     return (
       <li
-        id={task.id}
+        id={id}
         className={`tasks-container__item ${
           this.state.dateToEnd <= 1440 && this.state.dateToEnd > 0 && !task.done
             ? 'tasks--one_day_to_complete'
@@ -46,38 +49,39 @@ export default class Task extends React.Component {
         } ${task.done ? 'task--completed' : ''}`}
         minutstoend={this.state.dateToEnd}
       >
-        <div className="task_wrapper">
-          <div className="task_wrapperText">
-            <span
-              className={`task-text ${task.done ? 'task-text--completed' : ''}`}
-            >
-              {task.text}
-            </span>
-
-            <div className="task-labels">
-              {task.date && (
-                <span className="task-date-label">До {task.date}</span>
-              )}
-              {task.done && (
-                <span className="task-completed-label">Выполнено</span>
-              )}
-              {this.state.dateToEnd < 0 && !task.done && (
-                <span className="task-overdue-label">
-                  Дата исполнения прошла
-                </span>
-              )}
+        <Link to={{ pathname: `/task/:id`, item: task, id: { id } }}>
+          <div className="task_wrapper">
+            <div className="task_wrapperText">
+              <span
+                className={`task-text ${
+                  task.done ? 'task-text--completed' : ''
+                }`}
+              >
+                {task.text}
+              </span>
+              <div className="task-labels">
+                {task.date && (
+                  <span className="task-date-label">До {task.date}</span>
+                )}
+                {task.done && (
+                  <span className="task-completed-label">Выполнено</span>
+                )}
+                {this.state.dateToEnd < 0 && !task.done && (
+                  <span className="task-overdue-label">
+                    Дата исполнения прошла
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="task-buttons">
+              <HoverButtons
+                task={task}
+                handleOnClickAccept={handleOnClickAccept}
+                handleOnClickDelete={handleOnClickDelete}
+              />
             </div>
           </div>
-
-          <div className="task-buttons">
-            <HoverButtons
-              task={task}
-              key={task.id}
-              handleOnClickAccept={handleOnClickAccept}
-              handleOnClickDelete={handleOnClickDelete}
-            />
-          </div>
-        </div>
+        </Link>
       </li>
     );
   }

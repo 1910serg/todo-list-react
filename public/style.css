@@ -173,11 +173,12 @@ body {
   height: 50px;
 }
 
-.tasks-container__list {
+.tasks-container {
   margin: 20px 15px 0px 15px;
 }
 
 .tasks-container__item {
+  display: block;
   padding: 10px;
   border: 2px solid #4fb8c7;
   background-color: #fff;
@@ -277,6 +278,38 @@ body {
 .task-labels {
   display: flex;
   flex: 1 1 auto;
+}
+
+.task-page_wrapper {
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  cursor: default;
+  min-height: 100%;
+  min-width: 100%;
+  background-color: #e5e5e5;
+}
+
+.task-page_container {
+  display: flex;
+  flex-direction: column;
+  margin: 24px 15px 0 15px;
+}
+
+.task-page_buttom-back {
+  width: 50px;
+  height: 16px;
+  background-color: #e5e5e5;
+}
+
+.task-page_text {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.task-page_date {
+  margin-top: 12px;
 }
 
 @media (max-width: 500px) {
