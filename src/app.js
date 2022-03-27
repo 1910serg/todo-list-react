@@ -1,6 +1,7 @@
 import React from 'react';
 import MainPage from './components/mainPage';
 import TaskPage from './components/taskPage';
+import TaskRedactPage from './components/taskRedactPage';
 import { Route, Switch } from 'react-router-dom';
 
 export default class App extends React.Component {
@@ -11,6 +12,22 @@ export default class App extends React.Component {
   handleOnSubmit = (task) => {
     this.setState({
       tasks: [...this.state.tasks, task],
+    });
+  };
+
+  handleOnRedactSubmit = (task) => {
+    const allTasks = this.state.tasks;
+    const currentTaskId = task.id;
+
+    const currentTaskIndex = allTasks.findIndex(
+      (taskElem) => taskElem.id == currentTaskId
+    );
+
+    allTasks[currentTaskIndex].text = task.text;
+    allTasks[currentTaskIndex].date = task.date;
+
+    this.setState({
+      tasks: allTasks,
     });
   };
 
@@ -51,6 +68,7 @@ export default class App extends React.Component {
           component={() => (
             <MainPage
               onSubmit={this.handleOnSubmit}
+              onRedactSubmit={this.handleOnRedactSubmit}
               onClickAccept={this.handleOnClickAccept}
               onClickDelete={this.handleOnClickDelete}
               tasks={this.state.tasks}
@@ -61,6 +79,10 @@ export default class App extends React.Component {
         <Route
           path="/task/:id"
           component={(props) => <TaskPage {...props} />}
+        />
+        <Route
+          path="/taskPage/:id"
+          component={(props) => <TaskRedactPage {...props} />}
         />
       </Switch>
     );

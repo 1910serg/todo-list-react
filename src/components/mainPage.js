@@ -66,6 +66,7 @@ export default class MainPage extends React.Component {
                 task={task}
                 key={task.id}
                 id={task.id}
+                onRedactSubmit={this.props.onRedactSubmit}
                 handleOnClickAccept={(e) =>
                   this.props.onClickAccept(e, task.id)
                 }
