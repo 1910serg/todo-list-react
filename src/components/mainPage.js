@@ -1,83 +1,71 @@
 import React from 'react';
+import {
+  createHandleClickAcceptAction,
+  createHandleClickDeleteAction,
+  createHandleRedactSubmitAction,
+} from './store/actions';
+import { connect } from 'react-redux';
 import Task from './task';
 import TaskForm from './taskForm';
 
-export default class MainPage extends React.Component {
-  state = {
-    inputTask: {
-      id: '',
-      text: '',
-      date: '',
-      done: '',
-    },
-  };
+const mapStateToProps = (store) => ({
+  tasks: store.tasks.tasks,
+});
 
-  handleOnTextChange = (e) => {
-    this.setState({
-      inputTask: {
-        ...this.state.inputTask,
-        text: e.target.value,
-      },
-    });
-  };
+const mapDispatchToProps = (dispatch) => ({
+  onClickAccept: (currentTaskId) =>
+    dispatch(createHandleClickAcceptAction(currentTaskId)),
+  onClickDelete: (currentTaskId) =>
+    dispatch(createHandleClickDeleteAction(currentTaskId)),
+  onRedactSubmit: (newTasks) =>
+    dispatch(createHandleRedactSubmitAction(newTasks)),
+});
 
-  handleOnDateChange = (e) => {
-    this.setState({
-      inputTask: {
-        ...this.state.inputTask,
-        date: e.target.value,
-      },
-    });
-  };
+function MainPage(props) {
+  const { tasks, onClickAccept, onClickDelete, onRedactSubmit } = props;
 
-  onSubmitClick = (e) => {
+  const handleClickAccept = (e, currentTaskId) => {
     e.preventDefault();
-    if (this.state.inputTask.text.length < 1) return;
-    this.props.onSubmit({
-      id: Date.now(),
-      text: this.state.inputTask.text,
-      date: this.state.inputTask.date,
-      done: false,
-    });
-    this.setState({
-      inputTask: {
-        id: '',
-        text: '',
-        date: '',
-        done: '',
-      },
-    });
+    onClickAccept(currentTaskId);
   };
 
-  render() {
-    return (
-      <div className="wrapper">
-        <div className="container">
-          <TaskForm
-            onTextChange={this.handleOnTextChange}
-            onDateChange={this.handleOnDateChange}
-            onTaskAdd={this.onSubmitClick}
-            text={this.state.inputTask.text}
-            date={this.state.inputTask.date}
-          />
-          <ul className="tasks-container">
-            {this.props.tasks.map((task) => (
-              <Task
-                task={task}
-                key={task.id}
-                id={task.id}
-                onRedactSubmit={this.props.onRedactSubmit}
-                handleOnClickAccept={(e) =>
-                  this.props.onClickAccept(e, task.id)
-                }
-                handleOnClickDelete={(e) =>
-                  this.props.onClickDelete(e, task.id)
-                }
-              />
-            ))}
-          </ul>
-        </div>
-      </div>
+  const handleClickDelete = (e, currentTaskId) => {
+    e.preventDefault();
+    onClickDelete(currentTaskId);
+  };
+
+  const handleOnRedactSubmit = (task) => {
+    const newTasks = tasks;
+    const currentTaskId = task.id;
+
+    const currentTaskIndex = newTasks.findIndex(
+      (taskElem) => taskElem.id == currentTaskId
     );
-  }
+
+    newTasks[currentTaskIndex].text = task.text;
+    newTasks[currentTaskIndex].date = task.date;
+
+    onRedactSubmit(newTasks);
+  };
+
+  return (
+    <div className="wrapper">
+      <div className="container">
+        <TaskForm />
+        <ul className="tasks-container">
+          {tasks.map((task) => (
+            <Task
+              task={task}
+              key={task.id}
+              id={task.id}
+              onRedactSubmit={handleOnRedactSubmit}
+              onClickAccept={(e) => handleClickAccept(e, task.id)}
+              onClickDelete={(e) => handleClickDelete(e, task.id)}
+            />
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

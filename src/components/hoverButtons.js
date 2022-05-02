@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function HoverButtons(props) {
-  const { handleOnClickAccept, handleOnClickDelete } = props;
+  const { onClickAccept, onClickDelete } = props;
 
   return (
     <span className="tasks-container__item__span">
@@ -9,7 +9,7 @@ export default function HoverButtons(props) {
         className={`tasks-container__item__accept${
           props.task.done ? '--completed' : ''
         }`}
-        onClick={handleOnClickAccept}
+        onClick={onClickAccept}
       >
         <svg
           width="21"
@@ -28,7 +28,7 @@ export default function HoverButtons(props) {
         className={`tasks-container__item__delete${
           props.task.done ? '--completed' : ''
         }`}
-        onClick={handleOnClickDelete}
+        onClick={onClickDelete}
       >
         <svg
           width="17"

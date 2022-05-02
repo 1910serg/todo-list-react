@@ -31,8 +31,7 @@ export default class Task extends React.Component {
   }
 
   render() {
-    const { handleOnClickAccept, handleOnClickDelete, onRedactSubmit, task } =
-      this.props;
+    const { onClickAccept, onClickDelete, onRedactSubmit, task } = this.props;
 
     return (
       <div className="link-wrapper">
@@ -87,8 +86,8 @@ export default class Task extends React.Component {
               <div className="task-buttons">
                 <HoverButtons
                   task={task}
-                  handleOnClickAccept={handleOnClickAccept}
-                  handleOnClickDelete={handleOnClickDelete}
+                  onClickAccept={onClickAccept}
+                  onClickDelete={onClickDelete}
                 />
               </div>
             </div>
